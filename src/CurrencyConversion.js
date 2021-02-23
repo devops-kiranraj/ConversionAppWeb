@@ -13,50 +13,48 @@ export class CurrencyConversion extends Component {
             ConvertedValue:'',
             ErrorMessage:''
          };
+
+         this.convertCurrency =this.convertCurrency.bind(this);
     }
 
-    changeHandler = (e) =>{
-        this.setState({[e.target.name]: e.target.value})
-    }
 
     convertCurrency(event){
         event.preventDefault();
-        var conversionUrl = 'http://localhost:50409/currency/convert/';
+        var conversionUrl = 'http://localhost:50409/currency/convert';
+        var souceCurrency = event.target.SourceCurrency.value;
+        var targetCurrency = event.target.TargetCurrency.value;
+        var amount = event.target.Amount.value;
+        var date = event.target.Date.value;
+        console.log(amount);
 
-        const qs = require('querystring');
-        
-        const currencyConverterRequest = {
-            SourceCurrency:event.target.SourceCurrency.value,
-            TargetCurrency:event.target.TargetCurrency.value,
-            Amount:event.target.Amount.value,
-        }
-        
-        console.log(currencyConverterRequest);
-
-        alert(JSON.stringify(currencyConverterRequest));
         fetch(conversionUrl,{
             method:"POST",
-            headers:{   'Content-Type':'application/json'  },
-            data:qs.stringify(currencyConverterRequest)
+            headers:{   'Content-Type':'application/json;'  },
+            body: JSON.stringify({
+                SourceCurrency: souceCurrency,
+                TargetCurrency: targetCurrency,
+                Amount: parseFloat(amount),
+                Date:date
+            })
         })
         .then(response => response.json())
         .then((result)=>{
-            alert(JSON.stringify(result));           
+            this.setState({ConvertedValue:result.targetAmount});
+            this.setState({ErrorMessage:result.statusMessage});                       
         },
         (error)=>{
-            alert(JSON.stringify(error));
+            alert('Failed');
+            console.log(error);
             this.setState({                
-                ErrorMessage:error.statusMessage,
-            });
-            
+                ErrorMessage: "Server call Failed"
+            });       
+            console.log(this.state.ErrorMessage);     
         });
     }
     render(){        
         return(
             <div>               
-               <h4 className="m-3 d-flex justify-content-left">Currency Conversion Screen</h4>
-
-               <h6 color="red" className="justify-content-right">{this.state.ErrorMessage}</h6>
+               <h4 className="m-3 d-flex justify-content-left">Currency Conversion Screen</h4>               
                <Form onSubmit={this.convertCurrency}>
                     <FormGroup controlId="SourceCurrency">
                         <Form.Label>Source Currency</Form.Label>
@@ -78,8 +76,11 @@ export class CurrencyConversion extends Component {
                         <Button variant="primary" type="submit">
                            Convert
                         </Button>
-                    </FormGroup>
-                </Form> 
+                    </FormGroup>                    
+                </Form>   
+               
+                    <h1>{this.state.ConvertedValue}</h1>
+                    <h2>{this.state.ErrorMessage}</h2>
             </div>
         )
     }

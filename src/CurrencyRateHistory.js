@@ -13,8 +13,7 @@ const CurrencyRateHistory = () => {
     const chart = () => {
         let currencyDate = [];
         let currencyRate = [];
-
-        //var conversionUrl = 'http://localhost:50409/currency/convertion/history?curencyCode='+currencyCode+"&fromdate="+fromDate+"&todate="+toDate;
+        
         fetch("http://localhost:50409/currency/convertion/history?curencyCode=NOK&fromdate=2021-02-12")
         .then(response => response.json())
         .then((result)=>{
@@ -37,31 +36,7 @@ const CurrencyRateHistory = () => {
         },
         (error)=>{
             alert("Failed");
-        });
-
-        // axios.get("http://localhost:50409/currency/convertion/history?curencyCode=NOK&fromdate=2021-02-12")
-        // .then(res=>{
-        //     console.log(res);
-        //     for(const data of res.data.data){
-        //         currencyDate.push(data.date);
-        //         currencyRate.push(data.rate);
-        //     }
-        //     setChartData({
-        //         labels:currencyDate,
-        //         datasets:[
-        //             {
-        //                 label: 'currency rate',
-        //                 data: currencyRate,
-        //                 backgroundColor:['rgba(54,158,173,.7)'],
-        //                 borderWidth:4
-        //             }
-        //         ]
-        //     })
-        // })
-        // .catch(err=>{
-        //     alert(JSON.stringify(err));
-        // })
-        //console.log(currencyDate,currencyRate);        
+        });              
     }
     
     useEffect(()=>  {
@@ -91,8 +66,8 @@ const CurrencyRateHistory = () => {
                 </FormGroup>
             </Form> 
             
-            <div style={{height:"200px"}}>
-                <Line data={chartData}/>
+            <div>
+                <Line style={{height:"400px"}} data={chartData}/>
             </div>                                
         </div>            
     )  

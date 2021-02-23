@@ -79,8 +79,8 @@ export class CurrencyTracker extends Component {
                     </FormGroup>
                 </Form> 
                 
-                <div style={{height:"200px"}}>
-                    <Line data={this.state.chartData}/>
+                <div>
+                    <Line  width={400} data={this.state.chartData}/>
                 </div>                                
             </div>            
         ) 
